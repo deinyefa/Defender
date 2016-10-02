@@ -8,9 +8,11 @@ public class SpaceshipController : MonoBehaviour {
 	public float moveSpeed = 10f;
 
 	private Rigidbody rb;
+	private GameObject engine;
 
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
+		engine = GameObject.FindGameObjectWithTag ("Engine");
 	}
 	
 	void FixedUpdate () {
@@ -22,6 +24,8 @@ public class SpaceshipController : MonoBehaviour {
 
 		if (other.gameObject.tag == "Obstacle" || other.gameObject.tag == "Enemy") {
 			gameController.gameOver = true;
+			GetComponent <MeshRenderer> ().enabled = false;
+			engine.SetActive (false);
 		}
 	}
 }
