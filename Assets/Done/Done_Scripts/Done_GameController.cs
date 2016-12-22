@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class Done_GameController : MonoBehaviour
@@ -18,9 +19,15 @@ public class Done_GameController : MonoBehaviour
 	public bool gameOver;
 	private bool restart;
 	private int score;
-	
+
+	private GameObject cam;
+	private float cameraPos;
+
 	void Start ()
 	{
+		cam = GameObject.FindGameObjectWithTag ("MainCamera");
+		cameraPos = cam.transform.position.z;
+
 		gameOver = false;
 		restart = false;
 		restartText.text = "";
@@ -36,7 +43,7 @@ public class Done_GameController : MonoBehaviour
 		{
 			if (Input.GetKeyDown (KeyCode.R))
 			{
-				Application.LoadLevel (Application.loadedLevel);
+				SceneManager.LoadScene ("Game");
 			}
 		}
 	}
@@ -49,7 +56,7 @@ public class Done_GameController : MonoBehaviour
 			for (int i = 0; i < hazardCount; i++)
 			{
 				GameObject hazard = hazards [Random.Range (0, hazards.Length)];
-				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, (spawnValues.z - cameraPos * Time.time));
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
